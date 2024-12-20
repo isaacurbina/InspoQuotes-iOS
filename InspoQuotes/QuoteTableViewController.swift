@@ -44,16 +44,32 @@ class QuoteTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-		return quotesToShow.count
+		return quotesToShow.count + 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "QuoteCell", for: indexPath)
-		cell.textLabel?.text = quotesToShow[indexPath.row]
-		cell.textLabel?.numberOfLines = 0
+		if indexPath.row < quotesToShow.count {
+			cell.textLabel?.text = quotesToShow[indexPath.row]
+			cell.textLabel?.numberOfLines = 0
+			cell.textLabel?.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+		} else {
+			cell.textLabel?.text = "Get More Quotes"
+			cell.textLabel?.textColor = #colorLiteral(red: 0.09383074194, green: 0.2372256815, blue: 0.2551415265, alpha: 1)
+			cell.accessoryType = .disclosureIndicator
+		}
         return cell
     }
 
+	// MARK: - Table view delegate methods
+	
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		if indexPath.row == quotesToShow.count {
+			buyPremiumQuotes()
+		}
+		tableView.deselectRow(at: indexPath, animated: true)
+	}
+	
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -106,4 +122,9 @@ class QuoteTableViewController: UITableViewController {
         
     }
 
+	// MARK: - In-App Purchase Methods
+	
+	private func buyPremiumQuotes() {
+		
+	}
 }
