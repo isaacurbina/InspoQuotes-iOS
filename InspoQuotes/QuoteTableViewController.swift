@@ -9,8 +9,8 @@
 import UIKit
 
 class QuoteTableViewController: UITableViewController {
-    
-    var quotesToShow = [
+	    
+    private var quotesToShow = [
         "Our greatest glory is not in never falling, but in rising every time we fall. — Confucius",
         "All our dreams can come true, if we have the courage to pursue them. – Walt Disney",
         "It does not matter how slowly you go as long as you do not stop. – Confucius",
@@ -19,7 +19,7 @@ class QuoteTableViewController: UITableViewController {
         "Hardships often prepare ordinary people for an extraordinary destiny. – C.S. Lewis"
     ]
     
-    let premiumQuotes = [
+    private let premiumQuotes = [
         "Believe in yourself. You are braver than you think, more talented than you know, and capable of more than you imagine. ― Roy T. Bennett",
         "I learned that courage was not the absence of fear, but the triumph over it. The brave man is not he who does not feel afraid, but he who conquers that fear. – Nelson Mandela",
         "There is only one thing that makes a dream impossible to achieve: the fear of failure. ― Paulo Coelho",
@@ -30,35 +30,29 @@ class QuoteTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+		tableView.separatorColor = .none
     }
 
     // MARK: - Table view data source
 
+	/*
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 2
     }
+	 */
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+		return quotesToShow.count
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "QuoteCell", for: indexPath)
+		cell.textLabel?.text = quotesToShow[indexPath.row]
+		cell.textLabel?.numberOfLines = 0
         return cell
     }
-    */
 
     /*
     // Override to support conditional editing of the table view.
@@ -105,13 +99,11 @@ class QuoteTableViewController: UITableViewController {
     }
     */
     
-    
-    
-    
+	
+	// MARK: - IBActions
     
     @IBAction func restorePressed(_ sender: UIBarButtonItem) {
         
     }
-
 
 }
