@@ -7,8 +7,13 @@
 //
 
 import UIKit
+import StoreKit
 
 class QuoteTableViewController: UITableViewController {
+	
+	// MARK: - constants/global attributes
+	
+	private var productID = "com.iucoding.InspoQuotes.PremiumQuotes"
 	    
     private var quotesToShow = [
         "Our greatest glory is not in never falling, but in rising every time we fall. — Confucius",
@@ -27,10 +32,13 @@ class QuoteTableViewController: UITableViewController {
         "Your true success in life begins only when you make the commitment to become excellent at what you do. — Brian Tracy",
         "Believe in yourself, take on your challenges, dig deep within yourself to conquer fears. Never let anyone bring you down. You got to keep going. – Chantal Sutherland"
     ]
+	
+	// MARK: - UIViewController
 
     override func viewDidLoad() {
         super.viewDidLoad()
 		tableView.separatorColor = .none
+		SKPaymentQueue.default().add(self)
     }
 
     // MARK: - Table view data source
@@ -125,6 +133,37 @@ class QuoteTableViewController: UITableViewController {
 	// MARK: - In-App Purchase Methods
 	
 	private func buyPremiumQuotes() {
-		
+		if SKPaymentQueue.canMakePayments() {
+			let paymentRequest = SKMutablePayment()
+			paymentRequest.productIdentifier = productID
+			SKPaymentQueue.default().add(paymentRequest)
+			
+		} else {
+			// can't make payments
+			print("User can't make payments.")
+		}
+	}
+}
+
+// MARK: - SKPaymentTransactionObserver
+
+extension QuoteTableViewController : SKPaymentTransactionObserver {
+	
+	func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+		for transaction in transactions {
+			switch transaction.transactionState {
+			case .purchased:
+				//purchaseComplete(transaction)
+				print("Transaction successful")
+			case .restored:
+				//restoreComplete(transaction)
+				print("Transaction restored")
+			case .failed:
+				//purchaseFailed(transaction)
+				print("Transaction failed")
+			default:
+				break
+			}
+		}
 	}
 }
