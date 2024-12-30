@@ -39,6 +39,9 @@ class QuoteTableViewController: UITableViewController {
         super.viewDidLoad()
 		tableView.separatorColor = .none
 		SKPaymentQueue.default().add(self)
+		if isPurchased() {
+			showPremiumQuotes()
+		}
     }
 
     // MARK: - Table view data source
@@ -51,8 +54,11 @@ class QuoteTableViewController: UITableViewController {
 	 */
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-		return quotesToShow.count + 1
+		return if isPurchased() {
+			quotesToShow.count
+		} else {
+			quotesToShow.count + 1
+		}
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -154,6 +160,8 @@ extension QuoteTableViewController : SKPaymentTransactionObserver {
 			switch transaction.transactionState {
 			case .purchased:
 				print("Transaction successful")
+				showPremiumQuotes()
+				UserDefaults.standard.setValue(true, forKey: productID)
 				break
 			case .restored:
 				print("Transaction restored")
@@ -170,5 +178,21 @@ extension QuoteTableViewController : SKPaymentTransactionObserver {
 			}
 			SKPaymentQueue.default().finishTransaction(transaction)
 		}
+	}
+	
+	private func isPurchased() -> Bool {
+		let purchaseStatus = UserDefaults.standard.bool(forKey: productID)
+		if purchaseStatus {
+			print("Previously purchased")
+			return true
+		} else {
+			print("Never purchased")
+			return false
+		}
+	}
+	
+	private func showPremiumQuotes() {
+		quotesToShow.append(contentsOf: premiumQuotes)
+		tableView.reloadData()
 	}
 }
