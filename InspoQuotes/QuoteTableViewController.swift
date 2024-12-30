@@ -153,17 +153,22 @@ extension QuoteTableViewController : SKPaymentTransactionObserver {
 		for transaction in transactions {
 			switch transaction.transactionState {
 			case .purchased:
-				//purchaseComplete(transaction)
 				print("Transaction successful")
+				break
 			case .restored:
-				//restoreComplete(transaction)
 				print("Transaction restored")
+				break
 			case .failed:
-				//purchaseFailed(transaction)
 				print("Transaction failed")
+				if let error = transaction.error {
+					let errorDescription = error.localizedDescription
+					print("Transaction failed due to error: \(errorDescription)")
+				}
+				break
 			default:
 				break
 			}
+			SKPaymentQueue.default().finishTransaction(transaction)
 		}
 	}
 }
