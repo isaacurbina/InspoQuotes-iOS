@@ -133,7 +133,7 @@ class QuoteTableViewController: UITableViewController {
 	// MARK: - IBActions
     
     @IBAction func restorePressed(_ sender: UIBarButtonItem) {
-        
+		SKPaymentQueue.default().restoreCompletedTransactions()
     }
 
 	// MARK: - In-App Purchase Methods
@@ -165,6 +165,9 @@ extension QuoteTableViewController : SKPaymentTransactionObserver {
 				break
 			case .restored:
 				print("Transaction restored")
+				showPremiumQuotes()
+				UserDefaults.standard.setValue(true, forKey: productID)
+				navigationItem.setRightBarButton(nil, animated: true)
 				break
 			case .failed:
 				print("Transaction failed")
